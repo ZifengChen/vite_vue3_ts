@@ -46,7 +46,6 @@ const submit = () => {
   }).then((res) => res.json())
 }
 </script>
-
 <style>
 * {
   padding: 0;
