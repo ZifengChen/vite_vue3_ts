@@ -34,10 +34,16 @@ export default defineConfig({
   //启动服务配置
   server: {
     host: '0.0.0.0',
-    port: 3000,
+    port: 3001,
     open: true,
     https: false,
-    proxy: {},
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
   // 生产环境打包配置
   //去除 console debugger

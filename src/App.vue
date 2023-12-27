@@ -1,21 +1,68 @@
-<script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+  <div class="wraps">
+    <el-form
+      label-position="right"
+      label-width="100px"
+      :model="formLabelAlign"
+      style="max-width: 460px"
+    >
+      <el-form-item label="账号">
+        <el-input v-model="formLabelAlign.name" />
+      </el-form-item>
+      <el-form-item label="密码">
+        <el-input v-model="formLabelAlign.region" />
+      </el-form-item>
+      <el-form-item label="验证码">
+        <div style="display: flex">
+          <el-input v-model="formLabelAlign.code" />
+          <img :src="codeUrl" alt="" @click="resendCode" />
+        </div>
+      </el-form-item>
+      <el-form-item><el-button @click="submit">登录</el-button></el-form-item>
+    </el-form>
+  </div>
 </template>
 
+<script lang="ts" setup>
+import { reactive, ref } from 'vue'
+
+const formLabelAlign = reactive({
+  name: '',
+  region: '',
+  code: '',
+})
+
+const codeUrl = ref<string>('/api/user/code')
+
+const resendCode = () => (codeUrl.value = codeUrl.value + '?' + Math.random())
+
+const submit = () => {
+  fetch('/api/user/create', {
+    method: 'POST',
+    body: JSON.stringify(formLabelAlign),
+    headers: {
+      'content-type': 'application/json',
+    },
+  }).then((res) => res.json())
+}
+</script>
+
 <style>
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.wraps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: inherit;
+}
+
+html,
+body,
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  height: 100%;
 }
 </style>
