@@ -1,5 +1,6 @@
 <template>
-  <div class="wraps">
+  <button @click="download">下载</button>
+  <!-- <div class="wraps">
     <el-form
       label-position="right"
       label-width="100px"
@@ -20,31 +21,45 @@
       </el-form-item>
       <el-form-item><el-button @click="submit">登录</el-button></el-form-item>
     </el-form>
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 
-const formLabelAlign = reactive({
-  name: '',
-  region: '',
-  code: '',
-})
-
-const codeUrl = ref<string>('/api/user/code')
-
-const resendCode = () => (codeUrl.value = codeUrl.value + '?' + Math.random())
-
-const submit = () => {
-  fetch('/api/user/create', {
-    method: 'POST',
-    body: JSON.stringify(formLabelAlign),
-    headers: {
-      'content-type': 'application/json',
-    },
-  }).then((res) => res.json())
+const useFetch = async (url: string) => {
+  const res = await fetch(url).then((res) => res.arrayBuffer())
+  const blob = new Blob([res])
+  const Url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = Url
+  a.download = 'zifeng.zip'
+  a.click()
 }
+
+const download = () => {
+  useFetch('/api/upload/stream')
+}
+
+// const formLabelAlign = reactive({
+//   name: '',
+//   region: '',
+//   code: '',
+// })
+
+// const codeUrl = ref<string>('/api/user/code')
+
+// const resendCode = () => (codeUrl.value = codeUrl.value + '?' + Math.random())
+
+// const submit = () => {
+//   fetch('/api/user/create', {
+//     method: 'POST',
+//     body: JSON.stringify(formLabelAlign),
+//     headers: {
+//       'content-type': 'application/json',
+//     },
+//   }).then((res) => res.json())
+// }
 </script>
 <style>
 * {
