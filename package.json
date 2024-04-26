@@ -12,6 +12,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "ant-design-vue": "4.x",
     "axios": "^0.26.1",
     "element-plus": "^2.4.4",
     "nprogress": "^0.2.0",
